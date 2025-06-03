@@ -1,4 +1,10 @@
-import { style } from "@vanilla-extract/css";
+import { style, globalStyle } from "@vanilla-extract/css";
+
+export const tableHeader = style({
+  display: "flex",
+  justifyContent: "space-between",
+  margin: "2rem 0 0.5rem 0",
+});
 
 export const sortWrapper = style({
   display: "flex",
@@ -6,10 +12,9 @@ export const sortWrapper = style({
   marginBottom: "0.5rem",
 });
 
-export const sortSelect = style({
-  padding: "0.5rem",
-  border: "1px solid #ccc",
-});
+export const selectOption = style({ padding: "5px" });
+
+export const totalCountBold = style({ fontWeight: "700" });
 
 export const table = style({
   width: "100%",
@@ -17,14 +22,26 @@ export const table = style({
   textAlign: "left",
   fontSize: "14px",
   backgroundColor: "#fff",
-  th: {
-    borderBottom: "2px solid #444",
-    padding: "10px",
-  },
-  td: {
-    borderBottom: "1px solid #ccc",
-    padding: "10px",
-  },
+  borderTop: "2px solid #5076db",
+});
+
+// th 스타일
+globalStyle(`${table} th`, {
+  borderBottom: "2px solid #444",
+  padding: "10px",
+  background: "#eee",
+});
+
+// td 스타일
+globalStyle(`${table} td`, {
+  borderBottom: "1px solid #ccc",
+  padding: "10px",
+  color: "#666",
+});
+
+export const clickableCell = style({
+  textDecoration: "underline",
+  cursor: "pointer",
 });
 
 export const pagination = style({

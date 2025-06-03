@@ -45,7 +45,7 @@ const SearchForm = ({
         {/* ① 영화명 + 제작연도 */}
         <div className={styles.col}>
           <div className={styles.group}>
-            <label>영화명</label>
+            <span className={styles.groupTitle}>영화명</span>
             <input
               type="text"
               value={movieName}
@@ -53,7 +53,7 @@ const SearchForm = ({
             />
           </div>
           <div className={styles.group}>
-            <label>제작연도</label>
+            <span className={styles.groupTitle}>제작연도</span>
             <div className={styles.yearRange}>
               <select
                 value={startYear}
@@ -85,7 +85,7 @@ const SearchForm = ({
         {/* ② 감독명 + 개봉일자 */}
         <div className={styles.col}>
           <div className={styles.group}>
-            <label>감독명</label>
+            <span className={styles.groupTitle}>감독명</span>
             <input
               type="text"
               value={directorName}
@@ -93,7 +93,7 @@ const SearchForm = ({
             />
           </div>
           <div className={styles.group}>
-            <label>개봉일자</label>
+            <span className={styles.groupTitle}>개봉일자</span>
             <div className={styles.datePair}>
               <input
                 type="date"

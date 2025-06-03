@@ -2,8 +2,12 @@
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
-  padding: "24px",
-  lineHeight: "1.6",
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+
+  width: "90%",
+  padding: "3rem",
 });
 
 export const title = style({
@@ -17,6 +21,9 @@ export const list = style({
   padding: "28px 30px",
   border: "1px solid #d9d9d9",
   background: "#f4f4f4",
+});
+export const listTextBold = style({
+  fontWeight: "700",
 });
 
 export const listItem = style({

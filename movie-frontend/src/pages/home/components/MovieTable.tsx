@@ -1,22 +1,11 @@
+import { useState } from "react";
 import { MOVIE_TABLE_HEADERS } from "@pages/home/constant/movie";
-import * as styles from "./MovieTable.css";
-
-interface Movie {
-  movieName: string;
-  movieEngName: string;
-  code: string;
-  year: string;
-  country: string;
-  type: string;
-  genre: string;
-  status: string;
-  director: string;
-  producer: string;
-}
+import * as styles from "@pages/home/components/MovieTable.css";
+import type { Movie } from "@pages/home/types/movieType";
+import MoviePopup from "@pages/home/components/MoviePopup";
 
 interface MovieTableProps {
   movies: Movie[];
-  sortKey: string; // "최신업데이트순" | "제작연도순" | "영화명순"
 }
 
 const sortMovies = (movies: Movie[], sortKey: string): Movie[] => {
@@ -29,18 +18,49 @@ const sortMovies = (movies: Movie[], sortKey: string): Movie[] => {
     case "영화명순":
       return sorted.sort((a, b) => a.movieName.localeCompare(b.movieName));
     default:
-      return movies;
+      return sorted;
   }
 };
 
-const MovieTable = ({ movies, sortKey }: MovieTableProps) => {
+const MovieTable = ({ movies }: MovieTableProps) => {
+  const [sortKey, setSortKey] = useState("최신업데이트순");
   const sortedMovies = sortMovies(movies, sortKey);
 
+  const [popup, setPopup] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+
+  const handlePopUp = (m: Movie) => {
+    setSelectedMovie(m);
+    setPopup(true);
+  };
+
+  const closePopup = () => {
+    setPopup(false);
+    setSelectedMovie(null);
+  };
   return (
     <div>
-      <div className={styles.totalCount}>
-        총 {sortedMovies.length.toLocaleString()}건
-      </div>
+      <section className={styles.tableHeader}>
+        <div>
+          <span>총 </span>
+          <span className={styles.totalCountBold}>
+            {sortedMovies.length.toLocaleString()}
+          </span>
+          <span>건</span>
+        </div>
+        <div className={styles.sortWrapper}>
+          <select
+            className={styles.selectOption}
+            onChange={(e) => setSortKey(e.target.value)}
+            value={sortKey}
+          >
+            <option value="최신업데이트순">최신업데이트순</option>
+            <option value="제작연도순">제작연도순</option>
+            <option value="영화명순">영화명순</option>
+          </select>
+        </div>
+      </section>
+
       <table className={styles.table}>
         <thead>
           <tr>
@@ -52,8 +72,18 @@ const MovieTable = ({ movies, sortKey }: MovieTableProps) => {
         <tbody>
           {sortedMovies.map((m, idx) => (
             <tr key={idx}>
-              <td>{m.movieName}</td>
-              <td>{m.movieEngName}</td>
+              <td
+                className={styles.clickableCell}
+                onClick={() => handlePopUp(m)}
+              >
+                {m.movieName}
+              </td>
+              <td
+                className={styles.clickableCell}
+                onClick={() => handlePopUp(m)}
+              >
+                {m.movieEngName}
+              </td>
               <td>{m.code}</td>
               <td>{m.year}</td>
               <td>{m.country}</td>
@@ -66,6 +96,9 @@ const MovieTable = ({ movies, sortKey }: MovieTableProps) => {
           ))}
         </tbody>
       </table>
+      {popup && selectedMovie && (
+        <MoviePopup movie={selectedMovie} onClose={closePopup} />
+      )}
     </div>
   );
 };

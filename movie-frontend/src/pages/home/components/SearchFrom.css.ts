@@ -18,17 +18,20 @@ export const row = style({
 });
 
 export const col = style({
-  flex: "1",
   display: "flex",
   flexDirection: "column",
-  gap: "1rem",
+  gap: "2rem",
   minWidth: "250px",
 });
 
 export const group = style({
   display: "flex",
+  gap: "1rem",
+});
 
-  gap: "0.5rem",
+export const groupTitle = style({
+  fontWeight: "700",
+  whiteSpace: "nowrap",
 });
 
 export const yearRange = style({
