@@ -1,31 +1,20 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { MOVIE_TABLE_HEADERS } from "@pages/home/constant/movie";
-import * as styles from "@pages/home/components/MovieTable.css";
+import { SORTKEY } from "@pages/home/constant/sortKey";
+import * as styles from "@pages/home/components/movieTable/MovieTable.css";
 import type { Movie } from "@pages/home/types/movieType";
-import MoviePopup from "@pages/home/components/MoviePopup";
+import MoviePopup from "@pages/home/components/moviePopup/MoviePopup";
+import { SortMovies } from "@pages/home/utils/sortMovies";
 
 interface MovieTableProps {
   movies: Movie[];
 }
 
-const sortMovies = (movies: Movie[], sortKey: string): Movie[] => {
-  const sorted = [...movies];
-  switch (sortKey) {
-    case "최신업데이트순":
-      return sorted.sort((a, b) => Number(b.code) - Number(a.code));
-    case "제작연도순":
-      return sorted.sort((a, b) => Number(b.year) - Number(a.year));
-    case "영화명순":
-      return sorted.sort((a, b) => a.movieName.localeCompare(b.movieName));
-    default:
-      return sorted;
-  }
-};
-
 const MovieTable = ({ movies }: MovieTableProps) => {
-  const [sortKey, setSortKey] = useState("최신업데이트순");
-  const sortedMovies = sortMovies(movies, sortKey);
-
+  const [sortKey, setSortKey] = useState<keyof typeof SORTKEY>("latest");
+  const sortedMovies = useMemo(() => {
+    return SortMovies(movies, sortKey);
+  }, [movies, sortKey]);
   const [popup, setPopup] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
@@ -51,12 +40,14 @@ const MovieTable = ({ movies }: MovieTableProps) => {
         <div className={styles.sortWrapper}>
           <select
             className={styles.selectOption}
-            onChange={(e) => setSortKey(e.target.value)}
+            onChange={(e) => setSortKey(e.target.value as keyof typeof SORTKEY)}
             value={sortKey}
           >
-            <option value="최신업데이트순">최신업데이트순</option>
-            <option value="제작연도순">제작연도순</option>
-            <option value="영화명순">영화명순</option>
+            {Object.entries(SORTKEY).map(([key, label]) => (
+              <option key={key} value={key}>
+                {label}
+              </option>
+            ))}
           </select>
         </div>
       </section>
