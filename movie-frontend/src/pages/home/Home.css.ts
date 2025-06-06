@@ -29,3 +29,22 @@ export const listTextBold = style({
 export const listItem = style({
   marginBottom: "10px",
 });
+
+export const excel = style({
+  display: "flex",
+  justifyContent: "flex-end",
+});
+
+export const excelBtn = style({
+  display: "inline-block",
+  padding: "5px 10px",
+  border: "1px solid #d7d7d7",
+  borderRadius: "3px",
+  background: "#fff",
+  fontSize: "12px",
+  textAlign: "center",
+  width: "42px",
+  color: "#555",
+  letterSpacing: "-0.05em",
+  lineHeight: "1",
+});

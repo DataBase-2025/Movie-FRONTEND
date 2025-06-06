@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import * as styles from "./MoviePopup.css";
-import type { Movie } from "../types/movieType";
+import * as styles from "@pages/home/components/moviePopup/MoviePopup.css";
+import type { Movie } from "@pages/home/types/movieType";
 
 interface MoviePopupProps {
   movie: Movie;

@@ -1,63 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as styles from "@pages/home/Home.css";
-import SearchForm from "./components/SearchFrome";
-import MovieTable from "./components/MovieTable";
-
-const movies = [
-  {
-    movieName: "주마등",
-    movieEngName: "Life Flashed Before...",
-    code: "20255368",
-    year: "2024",
-    country: "한국",
-    type: "단편",
-    genre: "드라마",
-    status: "기타",
-    director: "송원재",
-    producer: "",
-  },
-  {
-    movieName: "점.",
-    movieEngName: "The Point.",
-    code: "20255367",
-    year: "2024",
-    country: "한국",
-    type: "장편",
-    genre: "다큐멘터리",
-    status: "기타",
-    director: "",
-    producer: "",
-  },
-  // ... 더미 데이터
-];
-
-const sortMovies = (
-  movies: {
-    movieName: string;
-    movieEngName: string;
-    code: string;
-    year: string;
-    country: string;
-    type: string;
-    genre: string;
-    status: string;
-    director: string;
-    producer: string;
-  }[],
-  sortKey: string
-) => {
-  const sorted = [...movies];
-  switch (sortKey) {
-    case "최신업데이트순":
-      return sorted.sort((a, b) => Number(b.code) - Number(a.code));
-    case "제작연도순":
-      return sorted.sort((a, b) => Number(b.year) - Number(a.year));
-    case "영화명순":
-      return sorted.sort((a, b) => a.movieName.localeCompare(b.movieName));
-    default:
-      return movies;
-  }
-};
+import SearchForm from "@pages/home/components/searchForm/SearchFrome";
+import MovieTable from "@pages/home/components/movieTable/MovieTable";
+import { shouldIncludeMovie } from "@pages/home/utils/filterMovies";
+import { movies } from "./mockupData";
+import type { Movie } from "./types/movieType";
 
 const Home = () => {
   const [movieName, setMovieName] = useState("");
@@ -66,17 +13,43 @@ const Home = () => {
   const [endYear, setEndYear] = useState("");
   const [openStartDate, setOpenStartDate] = useState("");
   const [openEndDate, setOpenEndDate] = useState("");
-  const [sortKey, setSortKey] = useState("최신업데이트순");
+
+  const [type, setType] = useState("");
+  const [country, setCountry] = useState("");
+  const [genre, setGenre] = useState("");
+
+  const [status, setStatus] = useState("");
+  const [indexChar, setIndexChar] = useState("");
+  const [rating, setRating] = useState("");
+  const [screenType, setScreenType] = useState("");
+  const [repCountry, setRepCountry] = useState("");
+  const [movieDivisions, setMovieDivisions] = useState<string[]>([]);
+
+  const [filteredMovies, setFilteredMovies] = useState<Movie[]>(movies);
+
+  useEffect(() => {
+    if (indexChar !== "") {
+      handleSearch();
+    }
+  }, [indexChar]);
 
   const handleSearch = () => {
-    console.log("검색 조건:", {
+    const filters = {
       movieName,
       directorName,
       startYear,
       endYear,
-      openStartDate,
-      openEndDate,
-    });
+      type,
+      country,
+      genre,
+      status,
+      indexChar,
+    };
+
+    console.log("검색 조건:", filters);
+
+    const result = movies.filter((movie) => shouldIncludeMovie(movie, filters));
+    setFilteredMovies(result);
   };
 
   const handleReset = () => {
@@ -86,22 +59,29 @@ const Home = () => {
     setEndYear("");
     setOpenStartDate("");
     setOpenEndDate("");
+    setType("");
+    setCountry("");
+    setGenre("");
+    setStatus("");
+    setIndexChar("");
+    setRating("");
+    setScreenType("");
+    setRepCountry("");
+    setMovieDivisions([]);
   };
-
-  const filteredMovies = movies.filter((movie) => {
-    const matchesName = movie.movieName.includes(movieName);
-    const matchesDirector = movie.director.includes(directorName);
-    const matchesYear =
-      (!startYear || Number(movie.year) >= Number(startYear)) &&
-      (!endYear || Number(movie.year) <= Number(endYear));
-    // 날짜 필터는 생략 가능 (더미 데이터에 날짜 없음)
-    return matchesName && matchesDirector && matchesYear;
-  });
 
   return (
     <div className={styles.container}>
       <div>
-        <h1 className={styles.title}>영화 정보</h1>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h1 className={styles.title}>영화 정보</h1>
+          <img
+            src="/img/navImg.png"
+            alt="nav-image"
+            style={{ width: "260px" }}
+          />
+        </div>
+
         <ul className={styles.list}>
           <li className={styles.listItem}>
             <span className={styles.listTextBold}>
@@ -128,6 +108,9 @@ const Home = () => {
           </li>
         </ul>
       </div>
+      <div className={styles.excel}>
+        <button className={styles.excelBtn}>엑셀</button>
+      </div>
       <SearchForm
         movieName={movieName}
         setMovieName={setMovieName}
@@ -141,9 +124,28 @@ const Home = () => {
         setOpenStartDate={setOpenStartDate}
         openEndDate={openEndDate}
         setOpenEndDate={setOpenEndDate}
+        type={type}
+        setType={setType}
+        country={country}
+        setCountry={setCountry}
+        genre={genre}
+        setGenre={setGenre}
         onSearch={handleSearch}
         onReset={handleReset}
+        status={status}
+        setStatus={setStatus}
+        indexChar={indexChar}
+        setIndexChar={setIndexChar}
+        rating={rating}
+        screenType={screenType}
+        repCountry={repCountry}
+        movieDivisions={movieDivisions}
+        setRating={setRating}
+        setScreenType={setScreenType}
+        setRepCountry={setRepCountry}
+        setMovieDivisions={setMovieDivisions}
       />
+
       <MovieTable movies={filteredMovies} />
     </div>
   );
