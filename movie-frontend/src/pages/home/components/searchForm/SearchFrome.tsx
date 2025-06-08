@@ -297,15 +297,7 @@ const SearchForm = ({
                     onClick={() => setPopupField("country")}
                   />
                 </div>
-                <div className={styles.group}>
-                  <span className={styles.groupTitle}>등급별</span>
-                  <input
-                    readOnly
-                    className={styles.input}
-                    value={rating}
-                    onClick={() => setPopupField("rating")}
-                  />
-                </div>
+
                 <div className={styles.group}>
                   <span className={styles.groupTitle}>대표국적별</span>
                   <input
