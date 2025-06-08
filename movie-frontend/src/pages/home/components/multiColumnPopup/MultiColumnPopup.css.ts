@@ -17,7 +17,7 @@ export const popup = style({
   backgroundColor: "#fff",
   borderRadius: "6px",
   width: "80vw",
-  maxWidth: "900px",
+  maxWidth: "1000px",
   padding: "0 20px 20px 20px",
   boxSizing: "border-box",
   position: "relative",
@@ -89,6 +89,7 @@ export const th = style({
   background: "#f4f4f4",
   textWrap: "nowrap",
   lineHeight: "2",
+  boxSizing: "border-box",
 });
 
 export const selectTh = style({ width: "62px" });
