@@ -33,6 +33,7 @@
       "@router/*": ["./src/router/*"],
       "@img/*": ["./src/assets/img/*"],
       "@svg/*": ["./src/assets/svg/*"],
+      "@constant/*": ["./src/constant/*"],
       "@/*": ["./src/*"]
     }
   },
