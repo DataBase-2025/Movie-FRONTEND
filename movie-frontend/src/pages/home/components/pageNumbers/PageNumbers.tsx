@@ -13,9 +13,18 @@ const PageNumbers: React.FC<PageNumbersProps> = ({
 }) => {
   const pages = [];
 
-  // 최대 5개의 페이지만 보여주기 (앞뒤로 간단한 범위 조정)
-  const start = 1;
-  const end = total_Page;
+  // 시작 페이지와 끝 페이지 계산
+  let start = Math.max(1, page - 4);
+  let end = Math.min(total_Page, page + 5);
+
+  // 항상 10개가 안 된다면 보정
+  if (end - start + 1 < 10) {
+    if (start === 1) {
+      end = Math.min(10, total_Page);
+    } else if (end === total_Page) {
+      start = Math.max(1, total_Page - 9);
+    }
+  }
 
   for (let i = start; i <= end; i++) {
     pages.push(i);
@@ -27,8 +36,9 @@ const PageNumbers: React.FC<PageNumbersProps> = ({
         onClick={() => handlePageChange(page - 1)}
         disabled={page === 1}
         style={{
-          backgroundColor: "ccc",
+          backgroundColor: "#eee",
           border: "0.5px solid black",
+          cursor: page === 1 ? "not-allowed" : "pointer",
         }}
       >
         ◀
@@ -38,9 +48,13 @@ const PageNumbers: React.FC<PageNumbersProps> = ({
           key={p}
           onClick={() => handlePageChange(p)}
           style={{
+            width: "50px",
             fontWeight: p === page ? "bold" : "normal",
             backgroundColor: p === page ? "#ccc" : "transparent",
             border: "0.5px solid black",
+            padding: "6px 12px",
+            borderRadius: "4px",
+            cursor: "pointer",
           }}
         >
           {p}
@@ -49,6 +63,11 @@ const PageNumbers: React.FC<PageNumbersProps> = ({
       <button
         onClick={() => handlePageChange(page + 1)}
         disabled={page === total_Page}
+        style={{
+          backgroundColor: "#eee",
+          border: "0.5px solid black",
+          cursor: page === total_Page ? "not-allowed" : "pointer",
+        }}
       >
         ▶
       </button>
