@@ -13,10 +13,13 @@ import {
 import MultiColumnPopup from "@pages/home/components/multiColumnPopup/MultiColumnPopup";
 
 interface SearchFormProps {
-  movieName: string;
-  setMovieName: (value: string) => void;
-  directorName: string;
-  setDirectorName: (value: string) => void;
+  title: string;
+  setTitle: (value: string) => void;
+  director: string;
+  setDirector: (value: string) => void;
+  nation: string;
+  setNation: (value: string) => void;
+
   startYear: string;
   setStartYear: (value: string) => void;
   endYear: string;
@@ -29,8 +32,6 @@ interface SearchFormProps {
   onReset: () => void;
   type: string;
   setType: (value: string) => void;
-  country: string;
-  setCountry: (value: string) => void;
   genre: string;
   setGenre: (value: string) => void;
   status: string;
@@ -45,13 +46,17 @@ interface SearchFormProps {
   setRepCountry: (value: string) => void;
   movieDivisions: string[];
   setMovieDivisions: (value: string[]) => void;
+  handleIndexing: (index: string) => void;
 }
 
 const SearchForm = ({
-  movieName,
-  setMovieName,
-  directorName,
-  setDirectorName,
+  title,
+  setTitle,
+  director,
+  setDirector,
+  nation,
+  setNation,
+
   startYear,
   setStartYear,
   endYear,
@@ -64,8 +69,6 @@ const SearchForm = ({
   onReset,
   type,
   setType,
-  country,
-  setCountry,
   genre,
   setGenre,
   status,
@@ -80,6 +83,7 @@ const SearchForm = ({
   setRepCountry,
   movieDivisions,
   setMovieDivisions,
+  handleIndexing,
 }: SearchFormProps) => {
   const [showMore, setShowMore] = useState(false);
 
@@ -109,8 +113,8 @@ const SearchForm = ({
     },
     country: {
       columns: COUNTRY_COLUMNS,
-      value: country,
-      setter: setCountry,
+      value: nation,
+      setter: setNation,
     },
     status: {
       columns: STATUS_COLUMNS,
@@ -152,8 +156,8 @@ const SearchForm = ({
                 <input
                   className={styles.input}
                   type="text"
-                  value={movieName}
-                  onChange={(e) => setMovieName(e.target.value)}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
               <div className={styles.group}>
@@ -198,8 +202,8 @@ const SearchForm = ({
                 <input
                   className={styles.input}
                   type="text"
-                  value={directorName}
-                  onChange={(e) => setDirectorName(e.target.value)}
+                  value={director}
+                  onChange={(e) => setDirector(e.target.value)}
                 />
               </div>
               <div className={styles.group}>
@@ -293,19 +297,11 @@ const SearchForm = ({
                   <input
                     readOnly
                     className={styles.input}
-                    value={country}
+                    value={nation}
                     onClick={() => setPopupField("country")}
                   />
                 </div>
-                <div className={styles.group}>
-                  <span className={styles.groupTitle}>등급별</span>
-                  <input
-                    readOnly
-                    className={styles.input}
-                    value={rating}
-                    onClick={() => setPopupField("rating")}
-                  />
-                </div>
+
                 <div className={styles.group}>
                   <span className={styles.groupTitle}>대표국적별</span>
                   <input
@@ -350,7 +346,10 @@ const SearchForm = ({
                   className={`${styles.indexButton} ${
                     indexChar === char ? styles.indexActive : ""
                   }`}
-                  onClick={() => setIndexChar(char)}
+                  onClick={() => {
+                    setIndexChar(char);
+                    handleIndexing(char);
+                  }}
                   type="button"
                 >
                   {char}

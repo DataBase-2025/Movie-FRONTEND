@@ -67,22 +67,22 @@ const MovieTable = ({ movies }: MovieTableProps) => {
                 className={styles.clickableCell}
                 onClick={() => handlePopUp(m)}
               >
-                {m.movieName}
+                {m.title}
               </td>
               <td
                 className={styles.clickableCell}
                 onClick={() => handlePopUp(m)}
               >
-                {m.movieEngName}
+                {m.english_title}
               </td>
-              <td>{m.code}</td>
-              <td>{m.year}</td>
-              <td>{m.country}</td>
+              <td>{""}</td>
+              <td>{m.open_year}</td>
+              <td>{m.nations[0]}</td>
               <td>{m.type}</td>
-              <td>{m.genre}</td>
+              <td>{m.genres}</td>
               <td>{m.status}</td>
-              <td>{m.director}</td>
-              <td>{m.producer}</td>
+              <td>{m.directors[0]}</td>
+              <td>{""}</td>
             </tr>
           ))}
         </tbody>

@@ -2,30 +2,48 @@ import { useEffect, useState } from "react";
 import * as styles from "@pages/home/Home.css";
 import SearchForm from "@pages/home/components/searchForm/SearchFrome";
 import MovieTable from "@pages/home/components/movieTable/MovieTable";
-import { shouldIncludeMovie } from "@pages/home/utils/filterMovies";
-import { movies } from "./mockupData";
+import { indexingMovies } from "@pages/home/utils/indexingMovies";
+import { Dmovies } from "./mockupData";
 import type { Movie } from "./types/movieType";
+import { getMovies } from "@api/api";
 
 const Home = () => {
-  const [movieName, setMovieName] = useState("");
-  const [directorName, setDirectorName] = useState("");
+  const [title, setTitle] = useState("");
+  const [director, setDirector] = useState("");
+  const [nation, setNation] = useState("");
+
+  const [type, setType] = useState("");
+  const [genre, setGenre] = useState("");
+  const [status, setStatus] = useState("");
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
   const [openStartDate, setOpenStartDate] = useState("");
   const [openEndDate, setOpenEndDate] = useState("");
-
-  const [type, setType] = useState("");
-  const [country, setCountry] = useState("");
-  const [genre, setGenre] = useState("");
-
-  const [status, setStatus] = useState("");
   const [indexChar, setIndexChar] = useState("");
   const [rating, setRating] = useState("");
   const [screenType, setScreenType] = useState("");
   const [repCountry, setRepCountry] = useState("");
   const [movieDivisions, setMovieDivisions] = useState<string[]>([]);
 
+  const [movies, setMovies] = useState<Movie[]>(Dmovies);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>(movies);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getMovies();
+        console.log(response);
+        //movies에 넣기
+
+        setMovies(response);
+        setFilteredMovies(response);
+      } catch (error) {
+        console.error("Failed to fetch movies:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (indexChar !== "") {
@@ -33,34 +51,35 @@ const Home = () => {
     }
   }, [indexChar]);
 
-  const handleSearch = () => {
-    const filters = {
-      movieName,
-      directorName,
-      startYear,
-      endYear,
-      type,
-      country,
-      genre,
-      status,
-      indexChar,
-    };
+  const handleSearch = async () => {
+    const params: any = {};
+    if (title) params.title = title;
+    if (director) params.director = director;
+    if (nation) params.nation = nation;
 
-    console.log("검색 조건:", filters);
+    try {
+      const response = await getMovies(params);
+      setFilteredMovies(response);
+    } catch (error) {
+      console.error("Failed to fetch filtered movies:", error);
+    }
+  };
 
-    const result = movies.filter((movie) => shouldIncludeMovie(movie, filters));
+  const handleIndexing = (index: string) => {
+    const result = indexingMovies(filteredMovies, index);
     setFilteredMovies(result);
   };
 
-  const handleReset = () => {
-    setMovieName("");
-    setDirectorName("");
+  const handleReset = async () => {
+    // 서버 전체 데이터 다시 받아오기
+    setTitle("");
+    setDirector("");
+    setNation("");
     setStartYear("");
     setEndYear("");
     setOpenStartDate("");
     setOpenEndDate("");
     setType("");
-    setCountry("");
     setGenre("");
     setStatus("");
     setIndexChar("");
@@ -68,6 +87,13 @@ const Home = () => {
     setScreenType("");
     setRepCountry("");
     setMovieDivisions([]);
+    try {
+      const response = await getMovies();
+      setMovies(response);
+      setFilteredMovies(response);
+    } catch (error) {
+      console.error("Failed to fetch all movies on reset:", error);
+    }
   };
 
   return (
@@ -112,10 +138,10 @@ const Home = () => {
         <button className={styles.excelBtn}>엑셀</button>
       </div>
       <SearchForm
-        movieName={movieName}
-        setMovieName={setMovieName}
-        directorName={directorName}
-        setDirectorName={setDirectorName}
+        title={title}
+        setTitle={setTitle}
+        director={director}
+        setDirector={setDirector}
         startYear={startYear}
         setStartYear={setStartYear}
         endYear={endYear}
@@ -126,8 +152,8 @@ const Home = () => {
         setOpenEndDate={setOpenEndDate}
         type={type}
         setType={setType}
-        country={country}
-        setCountry={setCountry}
+        nation={nation}
+        setNation={setNation}
         genre={genre}
         setGenre={setGenre}
         onSearch={handleSearch}
@@ -144,6 +170,7 @@ const Home = () => {
         setScreenType={setScreenType}
         setRepCountry={setRepCountry}
         setMovieDivisions={setMovieDivisions}
+        handleIndexing={handleIndexing}
       />
 
       <MovieTable movies={filteredMovies} />
