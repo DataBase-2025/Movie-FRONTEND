@@ -2,23 +2,23 @@ import { useEffect, useState } from "react";
 import * as styles from "@pages/home/Home.css";
 import SearchForm from "@pages/home/components/searchForm/SearchFrome";
 import MovieTable from "@pages/home/components/movieTable/MovieTable";
-import { shouldIncludeMovie } from "@pages/home/utils/filterMovies";
+import { indexingMovies } from "@pages/home/utils/indexingMovies";
 import { movies } from "./mockupData";
 import type { Movie } from "./types/movieType";
+import { getMovies } from "@api/api";
 
 const Home = () => {
-  const [movieName, setMovieName] = useState("");
-  const [directorName, setDirectorName] = useState("");
+  const [title, setTitle] = useState("");
+  const [director, setDirector] = useState("");
+  const [nation, setNation] = useState("");
+
+  const [type, setType] = useState("");
+  const [genre, setGenre] = useState("");
+  const [status, setStatus] = useState("");
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
   const [openStartDate, setOpenStartDate] = useState("");
   const [openEndDate, setOpenEndDate] = useState("");
-
-  const [type, setType] = useState("");
-  const [country, setCountry] = useState("");
-  const [genre, setGenre] = useState("");
-
-  const [status, setStatus] = useState("");
   const [indexChar, setIndexChar] = useState("");
   const [rating, setRating] = useState("");
   const [screenType, setScreenType] = useState("");
@@ -28,39 +28,43 @@ const Home = () => {
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>(movies);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getMovies();
+        console.log(response);
+      } catch (error) {
+        console.error("Failed to fetch movies:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     if (indexChar !== "") {
       handleSearch();
     }
   }, [indexChar]);
 
   const handleSearch = () => {
-    const filters = {
-      movieName,
-      directorName,
-      startYear,
-      endYear,
-      type,
-      country,
-      genre,
-      status,
-      indexChar,
-    };
+    //서버
+  };
 
-    console.log("검색 조건:", filters);
-
-    const result = movies.filter((movie) => shouldIncludeMovie(movie, filters));
+  const handleIndexing = () => {
+    const result = indexingMovies(filteredMovies, indexChar);
     setFilteredMovies(result);
   };
 
   const handleReset = () => {
-    setMovieName("");
-    setDirectorName("");
+    setTitle("");
+    setDirector("");
+    setNation("");
+
     setStartYear("");
     setEndYear("");
     setOpenStartDate("");
     setOpenEndDate("");
     setType("");
-    setCountry("");
     setGenre("");
     setStatus("");
     setIndexChar("");
@@ -112,10 +116,10 @@ const Home = () => {
         <button className={styles.excelBtn}>엑셀</button>
       </div>
       <SearchForm
-        movieName={movieName}
-        setMovieName={setMovieName}
-        directorName={directorName}
-        setDirectorName={setDirectorName}
+        title={title}
+        setTitle={setTitle}
+        director={director}
+        setDirector={setDirector}
         startYear={startYear}
         setStartYear={setStartYear}
         endYear={endYear}
@@ -126,8 +130,8 @@ const Home = () => {
         setOpenEndDate={setOpenEndDate}
         type={type}
         setType={setType}
-        country={country}
-        setCountry={setCountry}
+        nation={nation}
+        setNation={setNation}
         genre={genre}
         setGenre={setGenre}
         onSearch={handleSearch}
@@ -144,6 +148,7 @@ const Home = () => {
         setScreenType={setScreenType}
         setRepCountry={setRepCountry}
         setMovieDivisions={setMovieDivisions}
+        handleIndexing={handleIndexing}
       />
 
       <MovieTable movies={filteredMovies} />
