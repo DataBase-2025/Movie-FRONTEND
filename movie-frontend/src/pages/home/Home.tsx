@@ -38,9 +38,9 @@ const Home = () => {
         console.log(response);
         //movies에 넣기
 
-        setMovies(response);
-        setFilteredMovies(response);
-        setTotalPage(100);
+        setMovies(response.data);
+        setFilteredMovies(response.data);
+        setTotalPage(response.pagination?.total_pages || 1);
       } catch (error) {
         console.error("Failed to fetch movies:", error);
       }
@@ -63,7 +63,7 @@ const Home = () => {
 
     try {
       const response = await getMovies(params);
-      setFilteredMovies(response);
+      setFilteredMovies(response.data);
     } catch (error) {
       console.error("Failed to fetch filtered movies:", error);
     }
@@ -93,8 +93,8 @@ const Home = () => {
     setMovieDivisions([]);
     try {
       const response = await getMovies();
-      setMovies(response);
-      setFilteredMovies(response);
+      setMovies(response.data);
+      setFilteredMovies(response.data);
     } catch (error) {
       console.error("Failed to fetch all movies on reset:", error);
     }
@@ -102,6 +102,7 @@ const Home = () => {
 
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
+    handleSearch();
   };
 
   return (
