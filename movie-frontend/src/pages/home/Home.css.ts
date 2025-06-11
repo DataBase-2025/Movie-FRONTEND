@@ -4,6 +4,7 @@ import { style } from "@vanilla-extract/css";
 export const container = style({
   display: "flex",
   flexDirection: "column",
+  alignItems: "center",
   gap: "1rem",
 
   width: "90%",
@@ -31,6 +32,7 @@ export const listItem = style({
 });
 
 export const excel = style({
+  width: "100%",
   display: "flex",
   justifyContent: "flex-end",
 });
