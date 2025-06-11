@@ -7,6 +7,7 @@ export interface MovieParams {
   title?: string;
   nation?: string;
   genre?: string;
+  page?: number;
 }
 
 export const getMovies = (params?: MovieParams) =>

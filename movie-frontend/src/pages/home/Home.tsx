@@ -6,11 +6,14 @@ import { indexingMovies } from "@pages/home/utils/indexingMovies";
 import { Dmovies } from "./mockupData";
 import type { Movie } from "./types/movieType";
 import { getMovies } from "@api/api";
+import PageNumbers from "./components/pageNumbers/PageNumbers";
 
 const Home = () => {
   const [title, setTitle] = useState("");
   const [director, setDirector] = useState("");
   const [nation, setNation] = useState("");
+  const [page, setPage] = useState(1);
+  const [total_page, setTotalPage] = useState(100);
 
   const [type, setType] = useState("");
   const [genre, setGenre] = useState("");
@@ -37,6 +40,7 @@ const Home = () => {
 
         setMovies(response);
         setFilteredMovies(response);
+        setTotalPage(100);
       } catch (error) {
         console.error("Failed to fetch movies:", error);
       }
@@ -94,6 +98,10 @@ const Home = () => {
     } catch (error) {
       console.error("Failed to fetch all movies on reset:", error);
     }
+  };
+
+  const handlePageChange = (pageNumber: number) => {
+    setPage(pageNumber);
   };
 
   return (
@@ -174,6 +182,11 @@ const Home = () => {
       />
 
       <MovieTable movies={filteredMovies} />
+      <PageNumbers
+        total_Page={total_page}
+        page={page}
+        handlePageChange={handlePageChange}
+      />
     </div>
   );
 };
