@@ -3,7 +3,7 @@ import * as styles from "@pages/home/Home.css";
 import SearchForm from "@pages/home/components/searchForm/SearchFrome";
 import MovieTable from "@pages/home/components/movieTable/MovieTable";
 import { indexingMovies } from "@pages/home/utils/indexingMovies";
-import { movies } from "./mockupData";
+import { Dmovies } from "./mockupData";
 import type { Movie } from "./types/movieType";
 import { getMovies } from "@api/api";
 
@@ -25,6 +25,7 @@ const Home = () => {
   const [repCountry, setRepCountry] = useState("");
   const [movieDivisions, setMovieDivisions] = useState<string[]>([]);
 
+  const [movies, setMovies] = useState<Movie[]>(Dmovies);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>(movies);
 
   useEffect(() => {
@@ -32,6 +33,10 @@ const Home = () => {
       try {
         const response = await getMovies();
         console.log(response);
+        //movies에 넣기
+
+        setMovies(response);
+        setFilteredMovies(response);
       } catch (error) {
         console.error("Failed to fetch movies:", error);
       }
@@ -46,20 +51,30 @@ const Home = () => {
     }
   }, [indexChar]);
 
-  const handleSearch = () => {
-    //서버
+  const handleSearch = async () => {
+    const params: any = {};
+    if (title) params.title = title;
+    if (director) params.director = director;
+    if (nation) params.nation = nation;
+
+    try {
+      const response = await getMovies(params);
+      setFilteredMovies(response);
+    } catch (error) {
+      console.error("Failed to fetch filtered movies:", error);
+    }
   };
 
-  const handleIndexing = () => {
-    const result = indexingMovies(filteredMovies, indexChar);
+  const handleIndexing = (index: string) => {
+    const result = indexingMovies(filteredMovies, index);
     setFilteredMovies(result);
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
+    // 서버 전체 데이터 다시 받아오기
     setTitle("");
     setDirector("");
     setNation("");
-
     setStartYear("");
     setEndYear("");
     setOpenStartDate("");
@@ -72,6 +87,13 @@ const Home = () => {
     setScreenType("");
     setRepCountry("");
     setMovieDivisions([]);
+    try {
+      const response = await getMovies();
+      setMovies(response);
+      setFilteredMovies(response);
+    } catch (error) {
+      console.error("Failed to fetch all movies on reset:", error);
+    }
   };
 
   return (

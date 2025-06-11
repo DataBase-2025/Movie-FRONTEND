@@ -46,7 +46,7 @@ interface SearchFormProps {
   setRepCountry: (value: string) => void;
   movieDivisions: string[];
   setMovieDivisions: (value: string[]) => void;
-  handleIndexing: () => void;
+  handleIndexing: (index: string) => void;
 }
 
 const SearchForm = ({
@@ -348,7 +348,7 @@ const SearchForm = ({
                   }`}
                   onClick={() => {
                     setIndexChar(char);
-                    handleIndexing();
+                    handleIndexing(char);
                   }}
                   type="button"
                 >

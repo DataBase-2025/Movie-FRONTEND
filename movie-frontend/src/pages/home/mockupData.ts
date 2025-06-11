@@ -1,6 +1,6 @@
 import type { Movie } from "./types/movieType";
 
-export const movies: Movie[] = [
+export const Dmovies: Movie[] = [
   {
     movie_id: 1,
     title: "기생충",
