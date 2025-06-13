@@ -28,7 +28,7 @@ const Home = () => {
   const [repCountry, setRepCountry] = useState("");
   const [movieDivisions, setMovieDivisions] = useState<string[]>([]);
 
-  const [movies, setMovies] = useState<Movie[]>(Dmovies);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>(movies);
 
   useEffect(() => {
@@ -56,10 +56,12 @@ const Home = () => {
   }, [indexChar]);
 
   const handleSearch = async () => {
+    console.log(page);
     const params: any = {};
     if (title) params.title = title;
     if (director) params.director = director;
     if (nation) params.nation = nation;
+    if (page) params.page = page;
 
     try {
       const response = await getMovies(params);
