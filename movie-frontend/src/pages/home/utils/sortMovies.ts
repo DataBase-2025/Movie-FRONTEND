@@ -5,11 +5,11 @@ export const SortMovies = (movies: Movie[], sortKey: keyof typeof SORTKEY) => {
   const sorted = [...movies];
   switch (sortKey) {
     case "latest":
-      return sorted.sort((a, b) => Number(b.code) - Number(a.code));
+      return sorted.sort((a, b) => Number(b.open_year) - Number(a.open_year));
     case "year":
-      return sorted.sort((a, b) => Number(b.year) - Number(a.year));
+      return sorted.sort((a, b) => Number(b.open_year) - Number(a.open_year));
     case "name":
-      return sorted.sort((a, b) => a.movieName.localeCompare(b.movieName));
+      return sorted.sort((a, b) => a.title.localeCompare(b.title));
     default:
       return movies;
   }
