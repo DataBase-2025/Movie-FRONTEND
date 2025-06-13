@@ -3,7 +3,6 @@ import * as styles from "@pages/home/Home.css";
 import SearchForm from "@pages/home/components/searchForm/SearchFrome";
 import MovieTable from "@pages/home/components/movieTable/MovieTable";
 import { indexingMovies } from "@pages/home/utils/indexingMovies";
-import { Dmovies } from "./mockupData";
 import type { Movie } from "./types/movieType";
 import { getMovies } from "@api/api";
 import PageNumbers from "./components/pageNumbers/PageNumbers";
@@ -56,7 +55,6 @@ const Home = () => {
   }, [indexChar]);
 
   const handleSearch = async () => {
-    console.log(page);
     const params: any = {};
     if (title) params.title = title;
     if (director) params.director = director;
