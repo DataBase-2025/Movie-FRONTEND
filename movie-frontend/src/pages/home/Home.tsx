@@ -3,7 +3,6 @@ import * as styles from "@pages/home/Home.css";
 import SearchForm from "@pages/home/components/searchForm/SearchFrome";
 import MovieTable from "@pages/home/components/movieTable/MovieTable";
 import { indexingMovies } from "@pages/home/utils/indexingMovies";
-import { Dmovies } from "./mockupData";
 import type { Movie } from "./types/movieType";
 import { getMovies } from "@api/api";
 import PageNumbers from "./components/pageNumbers/PageNumbers";
@@ -35,9 +34,6 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response = await getMovies();
-        console.log(response);
-        //movies에 넣기
-
         setMovies(response.data);
         setFilteredMovies(response.data);
         setTotalPage(response.pagination?.total_pages || 1);
@@ -56,7 +52,6 @@ const Home = () => {
   }, [indexChar]);
 
   const handleSearch = async () => {
-    console.log(page);
     const params: any = {};
     if (title) params.title = title;
     if (director) params.director = director;
@@ -64,6 +59,8 @@ const Home = () => {
     if (page) params.page = page;
     if (startYear) params.open_start_year = startYear;
     if (endYear) params.open_end_year = endYear;
+    if (genre) params.genres = genre;
+
     try {
       const response = await getMovies(params);
       setFilteredMovies(response.data);
