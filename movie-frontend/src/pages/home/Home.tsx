@@ -34,9 +34,6 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response = await getMovies();
-        console.log(response);
-        //movies에 넣기
-
         setMovies(response.data);
         setFilteredMovies(response.data);
         setTotalPage(response.pagination?.total_pages || 1);
@@ -62,6 +59,7 @@ const Home = () => {
     if (page) params.page = page;
     if (startYear) params.open_start_year = startYear;
     if (endYear) params.open_end_year = endYear;
+
     try {
       const response = await getMovies(params);
       setFilteredMovies(response.data);
