@@ -59,6 +59,7 @@ const Home = () => {
     if (page) params.page = page;
     if (startYear) params.open_start_year = startYear;
     if (endYear) params.open_end_year = endYear;
+    if (genre) params.genres = genre;
 
     try {
       const response = await getMovies(params);
