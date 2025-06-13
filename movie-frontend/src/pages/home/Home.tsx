@@ -28,14 +28,14 @@ const Home = () => {
   const [repCountry, setRepCountry] = useState("");
   const [movieDivisions, setMovieDivisions] = useState<string[]>([]);
 
-  const [movies, setMovies] = useState<Movie[]>(Dmovies);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>(movies);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getMovies();
-        setMovies(response.data || Dmovies);
+        setMovies(response.data || []);
         setFilteredMovies(response.data);
         setTotalPage(response.pagination?.total_pages || 1);
       } catch (error) {
@@ -45,10 +45,6 @@ const Home = () => {
 
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setFilteredMovies(indexingMovies(filteredMovies, indexChar));
-  }, [indexChar]);
 
   const handleSearch = async () => {
     const params: any = {};

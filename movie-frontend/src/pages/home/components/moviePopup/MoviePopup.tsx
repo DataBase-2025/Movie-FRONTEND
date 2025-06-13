@@ -15,7 +15,7 @@ const MoviePopup = ({ movie, onClose }: MoviePopupProps) => {
     <div className={styles.overlay}>
       <div className={styles.popup}>
         <header className={styles.header}>
-          <h2>{movie.director && ` ${movie.director} 감독전`}</h2>
+          <h2>{movie.directors && ` ${movie.directors} 감독전`}</h2>
           <button onClick={onClose} className={styles.closeBtn}>
             X
           </button>
@@ -42,15 +42,15 @@ const MoviePopup = ({ movie, onClose }: MoviePopupProps) => {
                 <div className={styles.details}>
                   <div className={styles.detail}>
                     <strong className={styles.detailTitle}>영화 이름</strong>
-                    <span>{movie.movieName}</span>
+                    <span>{movie.title}</span>
                   </div>
                   <div className={styles.detail}>
                     <strong className={styles.detailTitle}>코드</strong>
-                    <span>{movie.code ? movie.code : "해당없음"}</span>
+                    <span>{"해당없음"}</span>
                   </div>
                   <div className={styles.detail}>
                     <strong className={styles.detailTitle}>제작국가</strong>
-                    <span>{movie.country}</span>
+                    <span>{movie.nations[0]}</span>
                   </div>
                   <div className={styles.detail}>
                     <strong className={styles.detailTitle}>유형</strong>
@@ -58,7 +58,7 @@ const MoviePopup = ({ movie, onClose }: MoviePopupProps) => {
                   </div>
                   <div className={styles.detail}>
                     <strong className={styles.detailTitle}>장르</strong>
-                    <span>{movie.genre}</span>
+                    <span>{movie.genres[0]}</span>
                   </div>
                   <div className={styles.detail}>
                     <strong className={styles.detailTitle}>제작상태</strong>

@@ -346,8 +346,9 @@ const SearchForm = ({
                   className={`${styles.indexButton} ${
                     indexChar === char ? styles.indexActive : ""
                   }`}
-                  onClick={() => {
-                    setIndexChar(char);
+                  onClick={(e) => {
+                    console.log(e.target);
+                    //setIndexChar(e.target);
                     handleIndexing(char);
                   }}
                   type="button"
