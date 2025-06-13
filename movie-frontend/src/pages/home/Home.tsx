@@ -6,6 +6,7 @@ import { indexingMovies } from "@pages/home/utils/indexingMovies";
 import type { Movie } from "./types/movieType";
 import { getMovies } from "@api/api";
 import PageNumbers from "./components/pageNumbers/PageNumbers";
+import { Dmovies } from "./mockupData";
 
 const Home = () => {
   const [title, setTitle] = useState("");
@@ -27,14 +28,14 @@ const Home = () => {
   const [repCountry, setRepCountry] = useState("");
   const [movieDivisions, setMovieDivisions] = useState<string[]>([]);
 
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<Movie[]>(Dmovies);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>(movies);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getMovies();
-        setMovies(response.data);
+        setMovies(response.data || Dmovies);
         setFilteredMovies(response.data);
         setTotalPage(response.pagination?.total_pages || 1);
       } catch (error) {
@@ -46,9 +47,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (indexChar !== "") {
-      handleSearch();
-    }
+    setFilteredMovies(indexingMovies(filteredMovies, indexChar));
   }, [indexChar]);
 
   const handleSearch = async () => {
