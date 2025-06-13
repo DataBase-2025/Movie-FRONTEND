@@ -8,9 +8,10 @@ import { SortMovies } from "@pages/home/utils/sortMovies";
 
 interface MovieTableProps {
   movies: Movie[];
+  total_item: number;
 }
 
-const MovieTable = ({ movies }: MovieTableProps) => {
+const MovieTable = ({ movies, total_item }: MovieTableProps) => {
   const [sortKey, setSortKey] = useState<keyof typeof SORTKEY>("latest");
   const sortedMovies = useMemo(() => {
     return SortMovies(movies, sortKey);
@@ -32,9 +33,7 @@ const MovieTable = ({ movies }: MovieTableProps) => {
       <section className={styles.tableHeader}>
         <div>
           <span>총 </span>
-          <span className={styles.totalCountBold}>
-            {sortedMovies.length.toLocaleString()}
-          </span>
+          <span className={styles.totalCountBold}>{total_item}</span>
           <span>건</span>
         </div>
         <div className={styles.sortWrapper}>
