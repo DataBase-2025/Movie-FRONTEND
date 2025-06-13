@@ -62,7 +62,8 @@ const Home = () => {
     if (director) params.director = director;
     if (nation) params.nation = nation;
     if (page) params.page = page;
-
+    if (startYear) params.open_start_year = startYear;
+    if (endYear) params.open_end_year = endYear;
     try {
       const response = await getMovies(params);
       setFilteredMovies(response.data);
