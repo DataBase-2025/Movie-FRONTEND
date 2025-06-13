@@ -14,6 +14,7 @@ const Home = () => {
   const [nation, setNation] = useState("");
   const [page, setPage] = useState(1);
   const [total_page, setTotalPage] = useState(100);
+  const [total_item, setTotalItem] = useState(0);
 
   const [type, setType] = useState("");
   const [genre, setGenre] = useState("");
@@ -38,6 +39,7 @@ const Home = () => {
         setMovies(response.data || []);
         setFilteredMovies(response.data);
         setTotalPage(response.pagination?.total_pages || 1);
+        setTotalItem(response.pagination?.total_items || 0);
       } catch (error) {
         console.error("Failed to fetch movies:", error);
       }
@@ -46,12 +48,12 @@ const Home = () => {
     fetchData();
   }, []);
 
-  const handleSearch = async () => {
+  const handleSearch = async (newPageNumber: number = page) => {
     const params: any = {};
     if (title) params.title = title;
     if (director) params.director = director;
     if (nation) params.nation = nation;
-    if (page) params.page = page;
+    if (page) params.page = newPageNumber;
     if (startYear) params.open_start_year = startYear;
     if (endYear) params.open_end_year = endYear;
     if (genre) params.genres = genre;
@@ -60,6 +62,8 @@ const Home = () => {
     try {
       const response = await getMovies(params);
       setFilteredMovies(response.data);
+      setTotalPage(response.pagination?.total_pages || 1);
+      setTotalItem(response.pagination?.total_items || 0);
     } catch (error) {
       console.error("Failed to fetch filtered movies:", error);
     }
@@ -91,6 +95,8 @@ const Home = () => {
       const response = await getMovies();
       setMovies(response.data);
       setFilteredMovies(response.data);
+      setTotalPage(response.pagination?.total_pages || 1);
+      setTotalItem(response.pagination?.total_items || 0);
     } catch (error) {
       console.error("Failed to fetch all movies on reset:", error);
     }
@@ -98,7 +104,7 @@ const Home = () => {
 
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
-    handleSearch();
+    handleSearch(pageNumber);
   };
 
   return (
@@ -178,7 +184,7 @@ const Home = () => {
         handleIndexing={handleIndexing}
       />
 
-      <MovieTable movies={filteredMovies} />
+      <MovieTable movies={filteredMovies} total_item={total_item} />
       <PageNumbers
         total_Page={total_page}
         page={page}
